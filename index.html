@@ -3,18 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJAX Project</title>
-  <link rel="icon" href="images/favicon.ico">
-  <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>YGOGrid</title>
 </head>
-<body>
-  <header>
+<body class="bg-gray-100">
+
+<header class="header my-0">
+  <div class="flex w-full justify-center">
+    <div class="flex w-10/12 justify-left mx-auto">
+      <h1 class="text-4xl py-5 header-text">YGOGrid</h1>
+    </div>
+  </div>
   </header>
-  <main>
-  </main>
-  <script src="js/data.js"></script>
+  <!-- header -->
+
+  <main class="bg-gray-100">
+
+    <div class=" mx-auto my-4 flex justify-center items-center w-min rounded-full p-1 space-x-1 border border-gray-400 bg-white">
+      <button class="rounded-full px-4 px-1">1x1</button>
+      <button class="rounded-full px-4 px-1">2x2</button>
+      <button class="rounded-full px-4 px-1 selected-grid-size">3x3</button>
+    </div>
+    <!-- grid size changer -->
+
+
+<div class="flex w-full justify-center">
+  <div class="flex w-10/12">
+  <div class="grid h-96 grid-cols-4 grid-rows-4 grid-container mx-auto">
+    <div class="grid-item switcher-square flex flex-col justify-center items-center">
+      <h3 class="font-bold">YGOGRID</h3>
+      <div class="flex justify-center items-center"><h3 class="font-bold">#1</h3><i class="fa fa-chevron-down"></i></div>
+    </div>
+    <div class="grid-item category-square category-col1 flex flex-col justify-center items-center top-cat"></div>
+    <div class="grid-item category-square category-col2 flex flex-col justify-center items-center top-cat"></div>
+    <div class="grid-item category-square category-col3 flex flex-col justify-center items-center top-cat"></div>
+    <!-- top row: grid category switcher and top categories -->
+    <div class="grid-item category-square category-row1 flex flex-col justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <!-- 2nd row -->
+    <div class="grid-item category-square category-row2 flex flex-col justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <!-- 3rd row -->
+    <div class="grid-item category-square category-row3 flex flex-col justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <div class="grid-item game-square flex justify-center align-center"></div>
+    <!-- 4th row -->
+  </div>
+  </div>
+  <!-- game grid including category squares using display:grid -->
+</div>
+
+
+
+
+
+
+</main>
   <script src="js/main.js"></script>
+  <script src="js/data.js"></script>
 </body>
 </html>

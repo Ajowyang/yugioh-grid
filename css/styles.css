@@ -1,0 +1,38 @@
+
+
+.header{
+  background-color: #7D3E12;
+  color: white
+}
+
+.header-text{
+  font-family: ;
+}
+
+.game-square{
+  border: 1px solid black;
+  /* width: 90px;*/
+   /* height: 90px; */
+}
+
+.category-square{
+  border:1px solid red;
+  /* width: 90px;*/
+  /* height: 90px; */
+}
+
+.switcher-square{
+   border:1px solid green;
+  /* width: 90px;*/
+  /* height: 90px; */
+}
+
+.grid-container{
+  width: 384px;
+  max-width: 384px
+}
+
+.selected-grid-size{
+  background-color: #7D3E12;
+  color: white;
+}
