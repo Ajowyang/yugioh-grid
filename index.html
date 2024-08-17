@@ -12,12 +12,12 @@
 </head>
 <body class="bg-gray-100">
 
-<header class="header my-0">
-  <div class="flex w-full justify-center">
-    <div class="flex w-10/12 justify-left mx-auto">
-      <h1 class="text-4xl py-5 header-text">YGOGrid</h1>
+  <header class="header my-0">
+    <div class="flex w-full justify-center">
+      <div class="flex w-10/12 justify-left mx-auto">
+        <h1 class="text-4xl py-5 header-text">YGOGrid</h1>
+      </div>
     </div>
-  </div>
   </header>
   <!-- header -->
 
@@ -31,36 +31,45 @@
     <!-- grid size changer -->
 
 
-<div class="flex w-full justify-center">
-  <div class="flex w-10/12">
-  <div class="grid h-96 grid-cols-4 grid-rows-4 grid-container mx-auto">
-    <div class="grid-item switcher-square flex flex-col justify-center items-center">
-      <h3 class="font-bold">YGOGRID</h3>
-      <div class="flex justify-center items-center"><h3 class="font-bold">#1</h3><i class="fa fa-chevron-down"></i></div>
+    <div class="flex w-full justify-center">
+      <div class="flex w-10/12">
+      <div class="grid h-96 grid-cols-4 grid-rows-4 grid-container mx-auto">
+       <div class="grid-item switcher-square flex flex-col justify-end items-center">
+          <h3 class="font-bold">YGOGRID</h3>
+          <div class="flex justify-center items-center"><h3 class="font-bold">#1</h3><i class="fa fa-chevron-down"></i></div>
+        </div>
+        <div class="grid-item category-square category-col1 flex flex-col justify-end items-center top-cat"></div>
+        <div class="grid-item category-square category-col2 flex flex-col justify-end items-center top-cat"></div>
+        <div class="grid-item category-square category-col3 flex flex-col justify-end items-center top-cat"></div>
+        <!-- top row: grid category switcher and top categories -->
+        <div class="grid-item category-square category-row1 flex flex-col justify-end items-center left-cat"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+       <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+       <!-- 2nd row -->
+        <div class="grid-item category-square category-row2 flex flex-col justify-end items-center left-cat"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+        <!-- 3rd row -->
+        <div class="grid-item category-square category-row3 flex flex-col justify-end items-center left-cat"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
+        <!-- 4th row -->
+      </div>
+      </div>
+      <!-- game grid including category squares using display:grid -->
     </div>
-    <div class="grid-item category-square category-col1 flex flex-col justify-center items-center top-cat"></div>
-    <div class="grid-item category-square category-col2 flex flex-col justify-center items-center top-cat"></div>
-    <div class="grid-item category-square category-col3 flex flex-col justify-center items-center top-cat"></div>
-    <!-- top row: grid category switcher and top categories -->
-    <div class="grid-item category-square category-row1 flex flex-col justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <!-- 2nd row -->
-    <div class="grid-item category-square category-row2 flex flex-col justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <!-- 3rd row -->
-    <div class="grid-item category-square category-row3 flex flex-col justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <div class="grid-item game-square flex justify-center align-center"></div>
-    <!-- 4th row -->
-  </div>
-  </div>
-  <!-- game grid including category squares using display:grid -->
-</div>
+
+    <div class="flex justify-center">
+      <div class="flex flex-col my-4">
+        <div class="flex justify-center">
+        <button class="my-1 bottom-button rounded-xl bottom-button px-3 py-1">STATS</button>
+        </div>
+        <button class="my-1 bottom-button rounded-xl bottom-button px-3 py-1 ">CLEAR GRID</button>
+      </div>
+    </div>
 
 
 
