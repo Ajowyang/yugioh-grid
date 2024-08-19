@@ -40,3 +40,17 @@ function renderGridCategories(gridID) {
     }
 } //function that renders Grid Categories based on what number Grid
 renderGridCategories(currentGridId);
+var $gridContainer = document.querySelector('.grid-container');
+if (!$gridContainer)
+    throw new Error('.grid-container query failed!');
+var $modal = document.querySelector('.modal');
+if (!$modal)
+    throw new Error('.modal query failed!');
+$gridContainer.addEventListener('click', function (event) {
+    var element = event.target;
+    console.log(element.classList);
+    if (element.classList.contains('game-square')) {
+        console.log('game sq!');
+        $modal.classList.remove('hidden');
+    }
+});

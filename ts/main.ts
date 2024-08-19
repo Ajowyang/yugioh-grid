@@ -64,3 +64,15 @@ renderGridCategories(currentGridId)
 
 const $gridContainer = document.querySelector('.grid-container') as HTMLDivElement
 if(!$gridContainer) throw new Error('.grid-container query failed!');
+const $modal = document.querySelector('.modal') as HTMLDivElement
+if(!$modal) throw new Error('.modal query failed!');
+
+$gridContainer.addEventListener('click', function(event:Event){
+  const element = event.target as HTMLElement
+  console.log(element.classList)
+  if(element.classList.contains('game-square')){
+    console.log('game sq!')
+    $modal.classList.remove('hidden')
+  }
+
+})
