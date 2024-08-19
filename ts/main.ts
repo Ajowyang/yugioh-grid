@@ -60,3 +60,7 @@ function renderGridCategories(gridID: number){
 }//function that renders Grid Categories based on what number Grid
 
 renderGridCategories(currentGridId)
+
+
+const $gridContainer = document.querySelector('.grid-container') as HTMLDivElement
+if(!$gridContainer) throw new Error('.grid-container query failed!');
