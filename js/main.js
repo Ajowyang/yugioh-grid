@@ -77,7 +77,6 @@ const categorySets = {
 };
 const currentGridId = 1;
 const gridSize = 3;
-let numCorrect = 0;
 const $topCategories = document.querySelectorAll('.top-cat');
 if (!$topCategories) throw new Error('.top-cat query failed!');
 const $leftCategories = document.querySelectorAll('.left-cat');
@@ -119,12 +118,10 @@ const $input = document.querySelector('input');
 if (!$input) throw new Error('input query failed');
 $gridContainer.addEventListener('click', function (event) {
   const element = event.target;
-  console.log(element.classList);
   if (
     element.classList.contains('game-square') &&
     !element.classList.contains('correct')
   ) {
-    console.log('game sq!');
     $modal.classList.remove('hidden');
     element.classList.add('bg-yellow-500', 'selected-sq');
   }
@@ -144,23 +141,6 @@ $form.addEventListener('submit', function (event) {
   const $selectedSq = document.querySelector('.selected-sq');
   if (!$selectedSq) throw new Error('.selected-sq query failed!');
   const usrInput = $input.value;
-  console.log(usrInput);
-  // const rowCatNdxStr: string = $selectedSq
-  //   .getAttribute('id')
-  //   ?.charAt(4) as string;
-  // const rowCatNdx: number = parseInt(rowCatNdxStr);
-  // const rowCatCheckFor: string =
-  //   categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
-  // const rowCatVal: number | string =
-  //   categorySets[currentGridId].leftCategories[rowCatNdx].val;
-  // const colCatNdxStr: string = $selectedSq
-  //   .getAttribute('id')
-  //   ?.charAt(6) as string;
-  // const colCatNdx: number = parseInt(colCatNdxStr);
-  // const colCatCheckFor: string =
-  //   categorySets[currentGridId].topCategories[colCatNdx].checkFor;
-  // const colCatVal: number | string =
-  //   categorySets[currentGridId].topCategories[colCatNdx].val;
   fetchData(usrInput);
 });
 async function fetchData(usrInput) {
@@ -190,7 +170,6 @@ async function fetchData(usrInput) {
       cardData[rowCatCheckFor] === rowCatVal &&
       cardData[colCatCheckFor] === colCatVal
     ) {
-      console.log('correct answer!');
       numCorrect++;
       const monsterImgContainer = document.createElement('div');
       monsterImgContainer.classList.add(
@@ -205,9 +184,6 @@ async function fetchData(usrInput) {
       $selectedSq.appendChild(monsterImgContainer);
       $selectedSq.classList.add('bg-green-500', 'correct');
       clearSelectedSqResetModal($selectedSq);
-      if (numCorrect / gridSize === gridSize) {
-        console.log('Nice Work!');
-      }
     }
   } catch (error) {
     console.log('Error: ', error);
