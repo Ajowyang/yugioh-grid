@@ -87,10 +87,9 @@ const categorySets: Record<string, CategorySet> = {
   },
 };
 
-const currentGridId = 1;
-const gridSize = 3;
-
-console.log('Drew');
+const currentGridId: number = 1;
+const gridSize: number = 3;
+let numCorrect: number = 0;
 
 const $topCategories = document.querySelectorAll(
   '.top-cat',
@@ -145,7 +144,10 @@ if (!$input) throw new Error('input query failed');
 $gridContainer.addEventListener('click', function (event: Event) {
   const element = event.target as HTMLElement;
   console.log(element.classList);
-  if (element.classList.contains('game-square')) {
+  if (
+    element.classList.contains('game-square') &&
+    !element.classList.contains('correct')
+  ) {
     console.log('game sq!');
     $modal.classList.remove('hidden');
     element.classList.add('bg-yellow-500', 'selected-sq');
@@ -158,9 +160,7 @@ $modal.addEventListener('click', function (event: Event) {
   if (!$selectedSq) throw new Error('.selected-sq query failed!');
 
   if (element.tagName !== 'BUTTON' && element.tagName !== 'INPUT') {
-    $input.value = '';
-    $modal.classList.add('hidden');
-    $selectedSq.classList.remove('bg-yellow-500');
+    clearSelectedSqResetModal($selectedSq);
   }
 });
 
@@ -174,49 +174,28 @@ $form.addEventListener('submit', function (event: Event) {
   const usrInput: string = $input.value;
   console.log(usrInput);
 
-  const rowCatNdxStr: string = $selectedSq
-    .getAttribute('id')
-    ?.charAt(4) as string;
-  const rowCatNdx: number = parseInt(rowCatNdxStr);
-  const rowCatCheckFor: string =
-    categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
-  const rowCatVal: number | string =
-    categorySets[currentGridId].leftCategories[rowCatNdx].val;
+  // const rowCatNdxStr: string = $selectedSq
+  //   .getAttribute('id')
+  //   ?.charAt(4) as string;
+  // const rowCatNdx: number = parseInt(rowCatNdxStr);
+  // const rowCatCheckFor: string =
+  //   categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
+  // const rowCatVal: number | string =
+  //   categorySets[currentGridId].leftCategories[rowCatNdx].val;
 
-  const colCatNdxStr: string = $selectedSq
-    .getAttribute('id')
-    ?.charAt(6) as string;
-  const colCatNdx: number = parseInt(colCatNdxStr);
-  const colCatCheckFor: string =
-    categorySets[currentGridId].topCategories[colCatNdx].checkFor;
-  const colCatVal: number | string =
-    categorySets[currentGridId].topCategories[colCatNdx].val;
+  // const colCatNdxStr: string = $selectedSq
+  //   .getAttribute('id')
+  //   ?.charAt(6) as string;
+  // const colCatNdx: number = parseInt(colCatNdxStr);
+  // const colCatCheckFor: string =
+  //   categorySets[currentGridId].topCategories[colCatNdx].checkFor;
+  // const colCatVal: number | string =
+  //   categorySets[currentGridId].topCategories[colCatNdx].val;
 
-  fetchData(usrInput, rowCatCheckFor, colCatCheckFor, rowCatVal, colCatVal);
-
-  // if ($selectedSq.getAttribute('id')) {
-  //   let rowCatNdx: number = parseInt($selectedSq.getAttribute('id')[4]); //leftCat(row) 0-2
-  //   let colCatNdx: number = parseInt($selectedSq.getAttribute('id')[6]); //topCat(col) 0-2
-  //   let rowCategory: string =
-  //     categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
-  //   let rowValue: string | number =
-  //     categorySets[currentGridId].leftCategories[rowCatNdx].val;
-  //   let colCategory =
-  //     categorySets[currentGridId].topCategories[colCatNdx].checkFor;
-  //   let colValue: string | number =
-  //     categorySets[currentGridId].topCategories[colCatNdx].val;
-  //   // if (
-  //   //   response[rowCategory] === rowValue &&
-  //   //   response[colCategory] === colValue
-  //   // ) {
-  //   // }
-  // }
+  fetchData(usrInput);
 });
 
-// function submitUsrInput(){
-//   console.log($input.value)
-// }
-interface miscInfo {
+interface MiscInfo {
   downvotes: number;
   formats: string[];
   has_effect: number;
@@ -230,14 +209,14 @@ interface miscInfo {
   viewsweek: number;
 }
 
-interface imageURLObj {
+interface ImageURLObj {
   id: number;
   image_url: string;
   image_url_small: string;
   image_url_cropped: string;
 }
 
-interface pricesObj {
+interface PricesObj {
   cardmarket_price: string;
   tcgplayer_price: string;
   ebay_price: string;
@@ -245,7 +224,7 @@ interface pricesObj {
   coolstuffinc_price: string;
 }
 
-interface setsObj {
+interface SetsObj {
   set_name: string;
   set_code: string;
   set_rarity: string;
@@ -253,36 +232,53 @@ interface setsObj {
   set_price: string;
 }
 
-interface data {
+interface Data {
   archetype: string;
   atk: number;
   attribute: string;
-  card_images: imageURLObj[];
-  card_prices: pricesObj[];
-  card_sets: setsObj[];
+  card_images: ImageURLObj[];
+  card_prices: PricesObj[];
+  card_sets: SetsObj[];
   desc: string;
   frameType: string;
   id: number;
   linkmarkers: string[];
   linkval: number;
-  misc_info: miscInfo[];
+  misc_info: MiscInfo[];
   name: string;
   race: string;
   type: string;
   ygoprodeck_url: string;
 }
 interface Card {
-  data: data[];
+  data: Data[];
 }
 
-async function fetchData(
-  usrInput: string,
-  rowCategory: string,
-  colCategory: string,
-  rowCatTarg: number | string,
-  colCatTarg: number | string,
-): Promise<void> {
+async function fetchData(usrInput: string): Promise<void> {
   try {
+    const $selectedSq = document.querySelector(
+      '.selected-sq',
+    ) as HTMLDivElement;
+    if (!$selectedSq) throw new Error('.selected-sq query failed!');
+
+    const rowCatNdxStr: string = $selectedSq
+      .getAttribute('id')
+      ?.charAt(4) as string;
+    const rowCatNdx: number = parseInt(rowCatNdxStr);
+    const rowCatCheckFor = categorySets[currentGridId].leftCategories[rowCatNdx]
+      .checkFor as keyof Data;
+    const rowCatVal: number | string =
+      categorySets[currentGridId].leftCategories[rowCatNdx].val;
+
+    const colCatNdxStr: string = $selectedSq
+      .getAttribute('id')
+      ?.charAt(6) as string;
+    const colCatNdx: number = parseInt(colCatNdxStr);
+    const colCatCheckFor = categorySets[currentGridId].topCategories[colCatNdx]
+      .checkFor as keyof Data;
+    const colCatVal: number | string =
+      categorySets[currentGridId].topCategories[colCatNdx].val;
+
     const apiUrl: string =
       'https://db.ygoprodeck.com/api/v7/cardinfo.php?name=' +
       usrInput.replace(/\s/g, '%20');
@@ -291,20 +287,40 @@ async function fetchData(
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const card = (await response.json()) as Card;
-    // const cardData: data = card.data[0];
-    console.log(card);
-    console.log(rowCategory);
-    console.log(rowCatTarg);
-    console.log(colCategory);
-    console.log(colCatTarg);
-    // if(rowCategory in cardData){
-    // console.log(cardData[rowCategory]);
-    // }
+    const cardData: Data = card.data[0];
 
-    // if (card.data[0][rowCategory] === rowCatTarg) {
-    //   console.log('row category correct');
-    // }
+    if (
+      cardData[rowCatCheckFor] === rowCatVal &&
+      cardData[colCatCheckFor] === colCatVal
+    ) {
+      console.log('correct answer!');
+      numCorrect++;
+
+      const monsterImgContainer = document.createElement('div');
+      monsterImgContainer.classList.add(
+        'h-11/12',
+        'w-11/12',
+        'flex',
+        'justify-center',
+      );
+      const monsterImg = document.createElement('img');
+      monsterImg.setAttribute('src', cardData.card_images[0].image_url_cropped);
+      monsterImgContainer.appendChild(monsterImg);
+      $selectedSq.appendChild(monsterImgContainer);
+      $selectedSq.classList.add('bg-green-500', 'correct');
+      clearSelectedSqResetModal($selectedSq);
+
+      if (numCorrect / gridSize === gridSize) {
+        console.log('Nice Work!');
+      }
+    }
   } catch (error) {
     console.log('Error: ', error);
   }
+}
+
+function clearSelectedSqResetModal(sq: HTMLDivElement): void {
+  sq.classList.remove('bg-yellow-500', 'selected-sq');
+  $input.value = '';
+  $modal.classList.add('hidden');
 }

@@ -1,5 +1,5 @@
 'use strict';
-let categorySets = {
+const categorySets = {
   1: {
     topCategories: [
       {
@@ -75,9 +75,9 @@ let categorySets = {
     ],
   },
 };
-let currentGridId = 1;
-let gridSize = 3;
-console.log('Drew');
+const currentGridId = 1;
+const gridSize = 3;
+let numCorrect = 0;
 const $topCategories = document.querySelectorAll('.top-cat');
 if (!$topCategories) throw new Error('.top-cat query failed!');
 const $leftCategories = document.querySelectorAll('.left-cat');
@@ -109,7 +109,7 @@ function renderGridCategories(gridID) {
     catTextLeft.textContent = categorySets[gridID].leftCategories[i].text;
     $leftCategories[i].appendChild(catTextLeft);
   }
-} //function that renders Grid Categories based on what number Grid
+} // function that renders Grid Categories based on what number Grid
 renderGridCategories(currentGridId);
 const $gridContainer = document.querySelector('.grid-container');
 if (!$gridContainer) throw new Error('.grid-container query failed!');
@@ -120,7 +120,10 @@ if (!$input) throw new Error('input query failed');
 $gridContainer.addEventListener('click', function (event) {
   const element = event.target;
   console.log(element.classList);
-  if (element.classList.contains('game-square')) {
+  if (
+    element.classList.contains('game-square') &&
+    !element.classList.contains('correct')
+  ) {
     console.log('game sq!');
     $modal.classList.remove('hidden');
     element.classList.add('bg-yellow-500', 'selected-sq');
@@ -128,12 +131,10 @@ $gridContainer.addEventListener('click', function (event) {
 });
 $modal.addEventListener('click', function (event) {
   const element = event.target;
-  const $selectedSq = document.querySelector('.selected-sq');
+  let $selectedSq = document.querySelector('.selected-sq');
   if (!$selectedSq) throw new Error('.selected-sq query failed!');
   if (element.tagName !== 'BUTTON' && element.tagName !== 'INPUT') {
-    $input.value = '';
-    $modal.classList.add('hidden');
-    $selectedSq.classList.remove('bg-yellow-500');
+    clearSelectedSqResetModal($selectedSq);
   }
 });
 const $form = document.querySelector('form');
@@ -142,46 +143,41 @@ $form.addEventListener('submit', function (event) {
   event.preventDefault();
   const $selectedSq = document.querySelector('.selected-sq');
   if (!$selectedSq) throw new Error('.selected-sq query failed!');
-  let usrInput = $input.value;
+  const usrInput = $input.value;
   console.log(usrInput);
-  let rowCatNdxStr = $selectedSq.getAttribute('id')?.charAt(4);
-  let rowCatNdx = parseInt(rowCatNdxStr);
-  let rowCatCheckFor =
-    categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
-  let rowCatVal = categorySets[currentGridId].leftCategories[rowCatNdx].val;
-  let colCatNdxStr = $selectedSq.getAttribute('id')?.charAt(6);
-  let colCatNdx = parseInt(colCatNdxStr);
-  let colCatCheckFor =
-    categorySets[currentGridId].topCategories[colCatNdx].checkFor;
-  let colCatVal = categorySets[currentGridId].topCategories[colCatNdx].val;
-  fetchData(usrInput, rowCatCheckFor, colCatCheckFor, rowCatVal, colCatVal);
-  // if ($selectedSq.getAttribute('id')) {
-  //   let rowCatNdx: number = parseInt($selectedSq.getAttribute('id')[4]); //leftCat(row) 0-2
-  //   let colCatNdx: number = parseInt($selectedSq.getAttribute('id')[6]); //topCat(col) 0-2
-  //   let rowCategory: string =
-  //     categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
-  //   let rowValue: string | number =
-  //     categorySets[currentGridId].leftCategories[rowCatNdx].val;
-  //   let colCategory =
-  //     categorySets[currentGridId].topCategories[colCatNdx].checkFor;
-  //   let colValue: string | number =
-  //     categorySets[currentGridId].topCategories[colCatNdx].val;
-  //   // if (
-  //   //   response[rowCategory] === rowValue &&
-  //   //   response[colCategory] === colValue
-  //   // ) {
-  //   // }
-  // }
+  // const rowCatNdxStr: string = $selectedSq
+  //   .getAttribute('id')
+  //   ?.charAt(4) as string;
+  // const rowCatNdx: number = parseInt(rowCatNdxStr);
+  // const rowCatCheckFor: string =
+  //   categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
+  // const rowCatVal: number | string =
+  //   categorySets[currentGridId].leftCategories[rowCatNdx].val;
+  // const colCatNdxStr: string = $selectedSq
+  //   .getAttribute('id')
+  //   ?.charAt(6) as string;
+  // const colCatNdx: number = parseInt(colCatNdxStr);
+  // const colCatCheckFor: string =
+  //   categorySets[currentGridId].topCategories[colCatNdx].checkFor;
+  // const colCatVal: number | string =
+  //   categorySets[currentGridId].topCategories[colCatNdx].val;
+  fetchData(usrInput);
 });
-async function fetchData(
-  usrInput,
-  rowCategory,
-  colCategory,
-  rowCatTarg,
-  colCatTarg,
-) {
+async function fetchData(usrInput) {
   try {
-    let apiUrl =
+    const $selectedSq = document.querySelector('.selected-sq');
+    if (!$selectedSq) throw new Error('.selected-sq query failed!');
+    const rowCatNdxStr = $selectedSq.getAttribute('id')?.charAt(4);
+    const rowCatNdx = parseInt(rowCatNdxStr);
+    const rowCatCheckFor =
+      categorySets[currentGridId].leftCategories[rowCatNdx].checkFor;
+    const rowCatVal = categorySets[currentGridId].leftCategories[rowCatNdx].val;
+    const colCatNdxStr = $selectedSq.getAttribute('id')?.charAt(6);
+    const colCatNdx = parseInt(colCatNdxStr);
+    const colCatCheckFor =
+      categorySets[currentGridId].topCategories[colCatNdx].checkFor;
+    const colCatVal = categorySets[currentGridId].topCategories[colCatNdx].val;
+    const apiUrl =
       'https://db.ygoprodeck.com/api/v7/cardinfo.php?name=' +
       usrInput.replace(/\s/g, '%20');
     const response = await fetch(apiUrl);
@@ -189,19 +185,36 @@ async function fetchData(
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const card = await response.json();
-    // const cardData: data = card.data[0];
-    console.log(card);
-    console.log(rowCategory);
-    console.log(rowCatTarg);
-    console.log(colCategory);
-    console.log(colCatTarg);
-    // if(rowCategory in cardData){
-    // console.log(cardData[rowCategory]);
-    // }
-    // if (card.data[0][rowCategory] === rowCatTarg) {
-    //   console.log('row category correct');
-    // }
+    const cardData = card.data[0];
+    if (
+      cardData[rowCatCheckFor] === rowCatVal &&
+      cardData[colCatCheckFor] === colCatVal
+    ) {
+      console.log('correct answer!');
+      numCorrect++;
+      const monsterImgContainer = document.createElement('div');
+      monsterImgContainer.classList.add(
+        'h-11/12',
+        'w-11/12',
+        'flex',
+        'justify-center',
+      );
+      const monsterImg = document.createElement('img');
+      monsterImg.setAttribute('src', cardData.card_images[0].image_url_cropped);
+      monsterImgContainer.appendChild(monsterImg);
+      $selectedSq.appendChild(monsterImgContainer);
+      $selectedSq.classList.add('bg-green-500', 'correct');
+      clearSelectedSqResetModal($selectedSq);
+      if (numCorrect / gridSize === gridSize) {
+        console.log('Nice Work!');
+      }
+    }
   } catch (error) {
     console.log('Error: ', error);
   }
+}
+function clearSelectedSqResetModal(sq) {
+  sq.classList.remove('bg-yellow-500', 'selected-sq');
+  $input.value = '';
+  $modal.classList.add('hidden');
 }
