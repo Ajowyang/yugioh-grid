@@ -131,7 +131,7 @@ $gridContainer.addEventListener('click', function (event) {
 });
 $modal.addEventListener('click', function (event) {
   const element = event.target;
-  let $selectedSq = document.querySelector('.selected-sq');
+  const $selectedSq = document.querySelector('.selected-sq');
   if (!$selectedSq) throw new Error('.selected-sq query failed!');
   if (element.tagName !== 'BUTTON' && element.tagName !== 'INPUT') {
     clearSelectedSqResetModal($selectedSq);
