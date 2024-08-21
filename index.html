@@ -1,91 +1,155 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/reset.css">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <title>YGOGrid</title>
-</head>
-<body class="bg-gray-100">
-
-  <header class="header my-0">
-    <div class="flex w-full justify-center">
-      <div class="flex w-10/12 justify-left mx-auto">
-        <h1 class="text-4xl py-5 header-text">YGOGrid</h1>
-      </div>
-    </div>
-  </header>
-  <!-- header -->
-
-  <main class="bg-gray-100">
-
-    <div class=" mx-auto my-4 flex justify-center items-center w-min rounded-full p-1 space-x-1 border border-gray-400 bg-white">
-      <button class="rounded-full px-4 px-1">1x1</button>
-      <button class="rounded-full px-4 px-1">2x2</button>
-      <button class="rounded-full px-4 px-1 selected-grid-size">3x3</button>
-    </div>
-    <!-- grid size changer -->
-
-    <div class="modal">
-      <form action="submit"></form>
-      <div class="modal-content flex justify-center mt-24">
-         <input class="rounded-l-md py-1 pl-4 pr-6" type="text"><button type="submit" class="bg-blue-500 text-white px-2 rounded-r-md submit-button">Submit</button>
-      </div>
-      </form>
-    </div>
-    <!-- modal with input field and submit button -->
-
-    <div class="flex w-full justify-center">
-      <div class="flex w-10/12">
-      <div class="grid h-96 grid-cols-4 grid-rows-4 grid-container mx-auto">
-       <div class="grid-item switcher-square flex flex-col justify-end items-center">
-          <h3 class="font-bold">YGOGRID</h3>
-          <div class="flex justify-center items-center"><h3 class="font-bold">#1</h3><i class="fa fa-chevron-down"></i></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <title>YGOGrid</title>
+  </head>
+  <body class="bg-gray-100">
+    <header class="header my-0">
+      <div class="flex w-full justify-center">
+        <div class="flex w-10/12 justify-left mx-auto">
+          <h1 class="text-4xl py-5 header-text">YGOGrid</h1>
         </div>
-        <div class="grid-item category-square category-col1 flex flex-col justify-end items-center top-cat"></div>
-        <div class="grid-item category-square category-col2 flex flex-col justify-end items-center top-cat"></div>
-        <div class="grid-item category-square category-col3 flex flex-col justify-end items-center top-cat"></div>
-        <!-- top row: grid category switcher and top categories -->
-        <div class="grid-item category-square category-row1 flex flex-col justify-end items-center left-cat"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-       <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-       <!-- 2nd row -->
-        <div class="grid-item category-square category-row2 flex flex-col justify-end items-center left-cat"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-        <!-- 3rd row -->
-        <div class="grid-item category-square category-row3 flex flex-col justify-end items-center left-cat"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-        <div class="grid-item game-square flex justify-center align-center border border-gray-100 bg-white"></div>
-        <!-- 4th row -->
       </div>
-      </div>
-      <!-- game grid including category squares using display:grid -->
-    </div>
+    </header>
+    <!-- header -->
 
-    <div class="flex justify-center">
-      <div class="flex flex-col my-4">
-        <div class="flex justify-center">
-        <button class="my-1 bottom-button rounded-xl bottom-button px-3 py-1">STATS</button>
+    <main class="bg-gray-100">
+      <div
+        class="mx-auto my-4 flex justify-center items-center w-min rounded-full p-1 space-x-1 border border-gray-400 bg-white">
+        <button class="rounded-full px-4 px-1">1x1</button>
+        <button class="rounded-full px-4 px-1">2x2</button>
+        <button class="rounded-full px-4 px-1 selected-grid-size">3x3</button>
+      </div>
+      <!-- grid size changer -->
+
+      <div class="modal hidden">
+        <form action="submit">
+          <div class="modal-content flex justify-center mt-24">
+            <input class="rounded-l-md py-1 pl-4 pr-6" type="text" /><button
+              type="submit"
+              class="bg-blue-500 text-white px-2 rounded-r-md submit-button">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- modal with input field and submit button -->
+
+      <div class="flex w-full justify-center">
+        <div class="flex w-10/12">
+          <div class="grid h-96 grid-cols-4 grid-rows-4 grid-container mx-auto">
+            <div
+              class="grid-item switcher-square flex flex-col justify-end items-center border border-gray-100">
+              <h3 class="font-bold">YGOGRID</h3>
+              <div class="flex justify-center items-center">
+                <h3 class="font-bold">#1</h3>
+                <i class="fa fa-chevron-down"></i>
+              </div>
+            </div>
+            <div
+              class="grid-item category-square category-col1 flex flex-col justify-end items-center border border-gray-100 top-cat"></div>
+            <div
+              class="grid-item category-square category-col2 flex flex-col justify-end items-center border border-gray-100 top-cat"></div>
+            <div
+              class="grid-item category-square category-col3 flex flex-col justify-end items-center border border-gray-100 top-cat"></div>
+            <!-- top row: grid category switcher and top categories -->
+            <div
+              class="grid-item category-square category-row1 flex flex-col justify-end items-center border border-gray-100 left-cat"></div>
+            <div
+              id="cat-0-0"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <div
+              id="cat-0-1"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <div
+              id="cat-0-2"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <!-- 2nd row -->
+            <div
+              class="grid-item category-square category-row2 flex flex-col justify-end items-center border border-gray-100 left-cat"></div>
+            <div
+              id="cat-1-0"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <div
+              id="cat-1-1"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <div
+              id="cat-1-2"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <!-- 3rd row -->
+            <div
+              class="grid-item category-square category-row3 flex flex-col justify-end items-center border border-gray-100 left-cat"></div>
+            <div
+              id="cat-2-0"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <div
+              id="cat-2-1"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <div
+              id="cat-2-2"
+              class="grid-item hover:bg-yellow-100 game-square flex justify-center items-center border border-gray-100 bg-white"></div>
+            <!-- 4th row -->
+          </div>
         </div>
-        <button class="my-1 bottom-button rounded-xl bottom-button px-3 py-1 ">CLEAR GRID</button>
+        <!-- game grid including category squares using display:grid -->
       </div>
-    </div>
 
+      <div class="modal stats hidden">
+        <div class="modal-content mt-60 flex justify-center items-center mt-24">
+          <div
+            class="flex flex-col items-center h-40 w-72 bg-gray-200 rounded-md main-content">
+            <div class="flex justify-end w-full main-content">
+              <i class="fa fa-times mr-1 mt-1 x-icon"></i>
+            </div>
+            <h2 class="pb-4 text-xl font-semibold main-content">Stats</h2>
+            <div class="flex justify-evenly w-full main-content">
+              <div
+                class="flex flex-col items-center bg-gray-50 w-1/4 rounded-md main-content">
+                <h4 class="text-sm main-content">Guesses</h4>
+                <h1 class="text-2xl main-content guesses-text">?</h1>
+              </div>
+              <div
+                class="flex flex-col items-center bg-gray-50 w-1/4 rounded-md main-content">
+                <h4 class="text-sm main-content">Correct</h4>
+                <h1 class="text-2xl main-content correct-text">?</h1>
+              </div>
+              <div
+                class="flex flex-col items-center bg-gray-50 w-1/4 rounded-md main-content">
+                <h4 class="text-sm main-content">Accuracy</h4>
+                <h1 class="text-2xl main-content accuracy-text">?</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- modal showing stats -->
 
-
-
-
-
-</main>
-  <script src="js/main.js"></script>
-  <script src="js/data.js"></script>
-</body>
+      <div class="flex justify-center">
+        <div class="flex flex-col my-4">
+          <div class="flex justify-center">
+            <button
+              class="my-1 bottom-button rounded-xl bottom-button px-3 py-1 stats-button">
+              STATS
+            </button>
+          </div>
+          <button class="my-1 bottom-button rounded-xl bottom-button px-3 py-1">
+            CLEAR GRID
+          </button>
+        </div>
+      </div>
+    </main>
+    <script src="js/main.js"></script>
+    <script src="js/data.js"></script>
+  </body>
 </html>
