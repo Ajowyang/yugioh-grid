@@ -89,8 +89,10 @@ const categorySets: Record<string, CategorySet> = {
 
 const currentGridId: number = 1;
 const gridSize: number = 3;
+
 let numCorrect: number = 0;
-const guesses: number = 0;
+let guesses: number = 0;
+let completedSquares: number = 0;
 
 const $topCategories = document.querySelectorAll(
   '.top-cat',
@@ -137,7 +139,7 @@ const $gridContainer = document.querySelector(
   '.grid-container',
 ) as HTMLDivElement;
 if (!$gridContainer) throw new Error('.grid-container query failed!');
-const $modal = document.querySelector('.modal') as HTMLDivElement;
+const $modal = document.querySelector('.modal') as HTMLDialogElement;
 if (!$modal) throw new Error('.modal query failed!');
 const $input = document.querySelector('input') as HTMLInputElement;
 if (!$input) throw new Error('input query failed');
@@ -146,9 +148,10 @@ $gridContainer.addEventListener('click', function (event: Event) {
   const element = event.target as HTMLElement;
   if (
     element.classList.contains('game-square') &&
-    !element.classList.contains('correct')
+    !element.classList.contains('correct') &&
+    !element.classList.contains('wrong')
   ) {
-    $modal.classList.remove('hidden');
+    $modal.show();
     element.classList.add('bg-yellow-500', 'selected-sq');
   }
 });
@@ -273,8 +276,6 @@ async function fetchData(usrInput: string): Promise<void> {
       cardData[rowCatCheckFor] === rowCatVal &&
       cardData[colCatCheckFor] === colCatVal
     ) {
-      numCorrect++;
-
       const monsterImgContainer = document.createElement('div');
       monsterImgContainer.classList.add(
         'h-11/12',
@@ -287,27 +288,48 @@ async function fetchData(usrInput: string): Promise<void> {
       monsterImgContainer.appendChild(monsterImg);
       $selectedSq.appendChild(monsterImgContainer);
       $selectedSq.classList.add('bg-green-500', 'correct');
+      $selectedSq.classList.remove('hover:bg-yellow-100');
+      numCorrect++;
+      guesses++;
+      completedSquares++;
+
+      clearSelectedSqResetModal($selectedSq);
+    } else {
+      guesses++;
+      completedSquares++;
+
+      $selectedSq.classList.add('bg-red-500', 'wrong');
+      $selectedSq.classList.remove('hover:bg-yellow-100');
       clearSelectedSqResetModal($selectedSq);
     }
+    if (completedSquares === gridSize * gridSize && $statsModal) {
+      setStatsText();
+      $statsModal.show();
+    }
   } catch (error) {
-    console.log('Error: ', error);
+    console.error('Error: ', error);
   }
 }
 
-const $statsModal = document.querySelector('.stats');
+const $statsModal = document.querySelector('.stats') as HTMLDialogElement;
 if (!$statsModal) throw new Error('.stats query failed!');
 const $statsButton = document.querySelector('.stats-button');
 if (!$statsButton) throw new Error('.stats-button query failed!');
+const $statsHeading = document.querySelector(
+  '.stats-heading',
+) as HTMLHeadingElement;
+if (!$statsHeading) throw new Error('.stats-heading query failed');
 
 $statsButton.addEventListener('click', function () {
-  $statsModal.classList.remove('hidden');
+  setStatsText();
+  $statsModal.show();
 });
 
 $statsModal.addEventListener('click', function (event: Event) {
   const element = event.target as HTMLElement;
-  console.log(element.classList);
+
   if (!element.classList.contains('main-content')) {
-    $statsModal.classList.add('hidden');
+    $statsModal.close();
   }
 });
 
@@ -328,15 +350,29 @@ setStatsText();
 function setStatsText(): void {
   $guessesTxt.textContent = guesses.toString();
   $correctTxt.textContent = numCorrect.toString();
+
   if (!(numCorrect / guesses)) {
-    $accuracyTxt.textContent = '100%';
+    $accuracyTxt.textContent = '0%';
   } else {
-    $accuracyTxt.textContent = (numCorrect / guesses).toString() + '%';
+    $accuracyTxt.textContent =
+      Math.floor((numCorrect / guesses) * 100).toString() + '%';
+  }
+
+  if (completedSquares === gridSize * gridSize && $statsModal) {
+    if (numCorrect / guesses === 1) {
+      $statsHeading.textContent = 'Perfect!';
+    } else if (numCorrect / guesses >= 0.66) {
+      $statsHeading.textContent = 'Nice Work!';
+    } else if (numCorrect / guesses === 0) {
+      $statsHeading.textContent = 'Bad Luck!';
+    } else {
+      $statsHeading.textContent = 'Room To Improve!';
+    }
   }
 }
 
 function clearSelectedSqResetModal(sq: HTMLDivElement): void {
   sq.classList.remove('bg-yellow-500', 'selected-sq');
   $input.value = '';
-  $modal.classList.add('hidden');
+  $modal.close();
 }

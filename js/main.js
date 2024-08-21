@@ -79,6 +79,7 @@ const currentGridId = 1;
 const gridSize = 3;
 let numCorrect = 0;
 let guesses = 0;
+let completedSquares = 0;
 const $topCategories = document.querySelectorAll('.top-cat');
 if (!$topCategories) throw new Error('.top-cat query failed!');
 const $leftCategories = document.querySelectorAll('.left-cat');
@@ -122,9 +123,10 @@ $gridContainer.addEventListener('click', function (event) {
   const element = event.target;
   if (
     element.classList.contains('game-square') &&
-    !element.classList.contains('correct')
+    !element.classList.contains('correct') &&
+    !element.classList.contains('wrong')
   ) {
-    $modal.classList.remove('hidden');
+    $modal.show();
     element.classList.add('bg-yellow-500', 'selected-sq');
   }
 });
@@ -172,7 +174,6 @@ async function fetchData(usrInput) {
       cardData[rowCatCheckFor] === rowCatVal &&
       cardData[colCatCheckFor] === colCatVal
     ) {
-      numCorrect++;
       const monsterImgContainer = document.createElement('div');
       monsterImgContainer.classList.add(
         'h-11/12',
@@ -185,24 +186,40 @@ async function fetchData(usrInput) {
       monsterImgContainer.appendChild(monsterImg);
       $selectedSq.appendChild(monsterImgContainer);
       $selectedSq.classList.add('bg-green-500', 'correct');
+      $selectedSq.classList.remove('hover:bg-yellow-100');
+      numCorrect++;
+      guesses++;
+      completedSquares++;
+      clearSelectedSqResetModal($selectedSq);
+    } else {
+      guesses++;
+      completedSquares++;
+      $selectedSq.classList.add('bg-red-500', 'wrong');
+      $selectedSq.classList.remove('hover:bg-yellow-100');
       clearSelectedSqResetModal($selectedSq);
     }
+    if (completedSquares === gridSize * gridSize && $statsModal) {
+      setStatsText();
+      $statsModal.show();
+    }
   } catch (error) {
-    console.log('Error: ', error);
+    console.error('Error: ', error);
   }
 }
 const $statsModal = document.querySelector('.stats');
 if (!$statsModal) throw new Error('.stats query failed!');
 const $statsButton = document.querySelector('.stats-button');
 if (!$statsButton) throw new Error('.stats-button query failed!');
+const $statsHeading = document.querySelector('.stats-heading');
+if (!$statsHeading) throw new Error('.stats-heading query failed');
 $statsButton.addEventListener('click', function () {
-  $statsModal.classList.remove('hidden');
+  setStatsText();
+  $statsModal.show();
 });
 $statsModal.addEventListener('click', function (event) {
   const element = event.target;
-  console.log(element.classList);
   if (!element.classList.contains('main-content')) {
-    $statsModal.classList.add('hidden');
+    $statsModal.close();
   }
 });
 const $guessesTxt = document.querySelector('.guesses-text');
@@ -216,13 +233,25 @@ function setStatsText() {
   $guessesTxt.textContent = guesses.toString();
   $correctTxt.textContent = numCorrect.toString();
   if (!(numCorrect / guesses)) {
-    $accuracyTxt.textContent = '100%';
+    $accuracyTxt.textContent = '0%';
   } else {
-    $accuracyTxt.textContent = (numCorrect / guesses).toString() + '%';
+    $accuracyTxt.textContent =
+      Math.floor((numCorrect / guesses) * 100).toString() + '%';
+  }
+  if (completedSquares === gridSize * gridSize && $statsModal) {
+    if (numCorrect / guesses === 1) {
+      $statsHeading.textContent = 'Perfect!';
+    } else if (numCorrect / guesses >= 0.66) {
+      $statsHeading.textContent = 'Nice Work!';
+    } else if (numCorrect / guesses === 0) {
+      $statsHeading.textContent = 'Bad Luck!';
+    } else {
+      $statsHeading.textContent = 'Room To Improve!';
+    }
   }
 }
 function clearSelectedSqResetModal(sq) {
   sq.classList.remove('bg-yellow-500', 'selected-sq');
   $input.value = '';
-  $modal.classList.add('hidden');
+  $modal.close();
 }
