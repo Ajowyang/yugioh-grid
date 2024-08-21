@@ -90,8 +90,8 @@ const categorySets: Record<string, CategorySet> = {
 const currentGridId: number = 1;
 const gridSize: number = 3;
 let numCorrect: number = 0;
-
 let guesses: number = 0;
+let completedSquares: number = 0;
 
 const $topCategories = document.querySelectorAll(
   '.top-cat',
@@ -277,6 +277,7 @@ async function fetchData(usrInput: string): Promise<void> {
     ) {
       numCorrect++;
       guesses++;
+      completedSquares++;
       setStatsText();
       const monsterImgContainer = document.createElement('div');
       monsterImgContainer.classList.add(
@@ -294,6 +295,7 @@ async function fetchData(usrInput: string): Promise<void> {
       clearSelectedSqResetModal($selectedSq);
     } else {
       guesses++;
+      completedSquares++;
       setStatsText();
       $selectedSq.classList.add('bg-red-500', 'wrong');
       $selectedSq.classList.remove('hover:bg-yellow-100');
@@ -343,6 +345,10 @@ function setStatsText(): void {
   } else {
     $accuracyTxt.textContent =
       Math.floor((numCorrect / guesses) * 100).toString() + '%';
+  }
+
+  if (completedSquares === gridSize * gridSize && $statsModal) {
+    $statsModal.classList.remove('hidden');
   }
 }
 

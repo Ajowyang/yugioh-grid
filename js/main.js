@@ -79,6 +79,7 @@ const currentGridId = 1;
 const gridSize = 3;
 let numCorrect = 0;
 let guesses = 0;
+let completedSquares = 0;
 const $topCategories = document.querySelectorAll('.top-cat');
 if (!$topCategories) throw new Error('.top-cat query failed!');
 const $leftCategories = document.querySelectorAll('.left-cat');
@@ -175,6 +176,7 @@ async function fetchData(usrInput) {
     ) {
       numCorrect++;
       guesses++;
+      completedSquares++;
       setStatsText();
       const monsterImgContainer = document.createElement('div');
       monsterImgContainer.classList.add(
@@ -192,6 +194,7 @@ async function fetchData(usrInput) {
       clearSelectedSqResetModal($selectedSq);
     } else {
       guesses++;
+      completedSquares++;
       setStatsText();
       $selectedSq.classList.add('bg-red-500', 'wrong');
       $selectedSq.classList.remove('hover:bg-yellow-100');
@@ -230,6 +233,9 @@ function setStatsText() {
   } else {
     $accuracyTxt.textContent =
       Math.floor((numCorrect / guesses) * 100).toString() + '%';
+  }
+  if (completedSquares === gridSize * gridSize && $statsModal) {
+    $statsModal.classList.remove('hidden');
   }
 }
 function clearSelectedSqResetModal(sq) {
