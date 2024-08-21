@@ -122,7 +122,8 @@ $gridContainer.addEventListener('click', function (event) {
   const element = event.target;
   if (
     element.classList.contains('game-square') &&
-    !element.classList.contains('correct')
+    !element.classList.contains('correct') &&
+    !element.classList.contains('wrong')
   ) {
     $modal.classList.remove('hidden');
     element.classList.add('bg-yellow-500', 'selected-sq');
@@ -173,6 +174,8 @@ async function fetchData(usrInput) {
       cardData[colCatCheckFor] === colCatVal
     ) {
       numCorrect++;
+      guesses++;
+      setStatsText();
       const monsterImgContainer = document.createElement('div');
       monsterImgContainer.classList.add(
         'h-11/12',
@@ -185,6 +188,13 @@ async function fetchData(usrInput) {
       monsterImgContainer.appendChild(monsterImg);
       $selectedSq.appendChild(monsterImgContainer);
       $selectedSq.classList.add('bg-green-500', 'correct');
+      $selectedSq.classList.remove('hover:bg-yellow-100');
+      clearSelectedSqResetModal($selectedSq);
+    } else {
+      guesses++;
+      setStatsText();
+      $selectedSq.classList.add('bg-red-500', 'wrong');
+      $selectedSq.classList.remove('hover:bg-yellow-100');
       clearSelectedSqResetModal($selectedSq);
     }
   } catch (error) {
@@ -216,9 +226,10 @@ function setStatsText() {
   $guessesTxt.textContent = guesses.toString();
   $correctTxt.textContent = numCorrect.toString();
   if (!(numCorrect / guesses)) {
-    $accuracyTxt.textContent = '100%';
+    $accuracyTxt.textContent = '0%';
   } else {
-    $accuracyTxt.textContent = (numCorrect / guesses).toString() + '%';
+    $accuracyTxt.textContent =
+      Math.floor((numCorrect / guesses) * 100).toString() + '%';
   }
 }
 function clearSelectedSqResetModal(sq) {
