@@ -89,6 +89,7 @@ const categorySets: Record<string, CategorySet> = {
 
 const currentGridId: number = 1;
 const gridSize: number = 3;
+
 let numCorrect: number = 0;
 let guesses: number = 0;
 let completedSquares: number = 0;
@@ -291,12 +292,12 @@ async function fetchData(usrInput: string): Promise<void> {
       numCorrect++;
       guesses++;
       completedSquares++;
-      setStatsText();
+
       clearSelectedSqResetModal($selectedSq);
     } else {
       guesses++;
       completedSquares++;
-      setStatsText();
+
       $selectedSq.classList.add('bg-red-500', 'wrong');
       $selectedSq.classList.remove('hover:bg-yellow-100');
       clearSelectedSqResetModal($selectedSq);
@@ -306,20 +307,25 @@ async function fetchData(usrInput: string): Promise<void> {
   }
 }
 
-const $statsModal = document.querySelector('.stats');
+const $statsModal = document.querySelector('.stats') as HTMLDialogElement;
 if (!$statsModal) throw new Error('.stats query failed!');
 const $statsButton = document.querySelector('.stats-button');
 if (!$statsButton) throw new Error('.stats-button query failed!');
+const $statsHeading = document.querySelector(
+  '.stats-heading',
+) as HTMLHeadingElement;
+if (!$statsHeading) throw new Error('.stats-heading query failed');
 
 $statsButton.addEventListener('click', function () {
-  $statsModal.classList.remove('hidden');
+  setStatsText();
+  $statsModal.show();
 });
 
 $statsModal.addEventListener('click', function (event: Event) {
   const element = event.target as HTMLElement;
   console.log(element.classList);
   if (!element.classList.contains('main-content')) {
-    $statsModal.classList.add('hidden');
+    $statsModal.close();
   }
 });
 
@@ -350,14 +356,15 @@ function setStatsText(): void {
 
   if (completedSquares === gridSize * gridSize && $statsModal) {
     $statsModal.classList.remove('hidden');
-    const $statsHeading = document.querySelector(
-      '.stats-heading',
-    ) as HTMLHeadingElement;
-    if (!$statsHeading) throw new Error('.stats-heading query failed');
+
     if (numCorrect / guesses === 1) {
       $statsHeading.textContent = 'Perfect!';
-    } else if (numCorrect / guesses >= 0.5) {
+    } else if (numCorrect / guesses >= 0.66) {
       $statsHeading.textContent = 'Nice Work!';
+    } else if (numCorrect / guesses === 0) {
+      $statsHeading.textContent = 'Bad Luck!';
+    } else {
+      $statsHeading.textContent = 'Room To Improve!';
     }
   }
 }

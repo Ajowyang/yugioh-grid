@@ -190,12 +190,10 @@ async function fetchData(usrInput) {
       numCorrect++;
       guesses++;
       completedSquares++;
-      setStatsText();
       clearSelectedSqResetModal($selectedSq);
     } else {
       guesses++;
       completedSquares++;
-      setStatsText();
       $selectedSq.classList.add('bg-red-500', 'wrong');
       $selectedSq.classList.remove('hover:bg-yellow-100');
       clearSelectedSqResetModal($selectedSq);
@@ -208,14 +206,17 @@ const $statsModal = document.querySelector('.stats');
 if (!$statsModal) throw new Error('.stats query failed!');
 const $statsButton = document.querySelector('.stats-button');
 if (!$statsButton) throw new Error('.stats-button query failed!');
+const $statsHeading = document.querySelector('.stats-heading');
+if (!$statsHeading) throw new Error('.stats-heading query failed');
 $statsButton.addEventListener('click', function () {
-  $statsModal.classList.remove('hidden');
+  setStatsText();
+  $statsModal.show();
 });
 $statsModal.addEventListener('click', function (event) {
   const element = event.target;
   console.log(element.classList);
   if (!element.classList.contains('main-content')) {
-    $statsModal.classList.add('hidden');
+    $statsModal.close();
   }
 });
 const $guessesTxt = document.querySelector('.guesses-text');
@@ -236,12 +237,14 @@ function setStatsText() {
   }
   if (completedSquares === gridSize * gridSize && $statsModal) {
     $statsModal.classList.remove('hidden');
-    const $statsHeading = document.querySelector('.stats-heading');
-    if (!$statsHeading) throw new Error('.stats-heading query failed');
     if (numCorrect / guesses === 1) {
       $statsHeading.textContent = 'Perfect!';
-    } else if (numCorrect / guesses >= 0.5) {
+    } else if (numCorrect / guesses >= 0.66) {
       $statsHeading.textContent = 'Nice Work!';
+    } else if (numCorrect / guesses === 0) {
+      $statsHeading.textContent = 'Bad Luck!';
+    } else {
+      $statsHeading.textContent = 'Room To Improve!';
     }
   }
 }

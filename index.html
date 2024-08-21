@@ -105,16 +105,16 @@
         <!-- game grid including category squares using display:grid -->
       </div>
 
-      <div class="modal stats hidden">
+      <dialog class="stats modal">
         <div class="modal-content mt-60 flex justify-center items-center mt-24">
           <div
             class="flex flex-col items-center h-40 w-72 bg-gray-200 rounded-md main-content">
             <div class="flex justify-end w-full main-content">
               <i class="fa fa-times mr-1 mt-1 x-icon"></i>
             </div>
-            <h2 class="pb-4 text-xl font-semibold main-content stats-heading">
+            <div class="pb-4 text-xl font-semibold main-content stats-heading">
               Stats
-            </h2>
+            </div>
             <div class="flex justify-evenly w-full main-content">
               <div
                 class="flex flex-col items-center bg-gray-50 w-1/4 rounded-md main-content">
@@ -134,7 +134,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </dialog>
       <!-- modal showing stats -->
 
       <div class="flex justify-center">
