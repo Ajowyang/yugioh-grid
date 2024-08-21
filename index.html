@@ -105,11 +105,41 @@
         <!-- game grid including category squares using display:grid -->
       </div>
 
+      <div class="modal stats hidden">
+        <div class="modal-content mt-60 flex justify-center items-center mt-24">
+          <div
+            class="flex flex-col items-center h-40 w-72 bg-gray-200 rounded-md main-content">
+            <div class="flex justify-end w-full main-content">
+              <i class="fa fa-times mr-1 mt-1 x-icon"></i>
+            </div>
+            <h2 class="pb-4 text-xl font-semibold main-content">Stats</h2>
+            <div class="flex justify-evenly w-full main-content">
+              <div
+                class="flex flex-col items-center bg-gray-50 w-1/4 rounded-md main-content">
+                <h4 class="text-sm main-content">Guesses</h4>
+                <h1 class="text-2xl main-content guesses-text">?</h1>
+              </div>
+              <div
+                class="flex flex-col items-center bg-gray-50 w-1/4 rounded-md main-content">
+                <h4 class="text-sm main-content">Correct</h4>
+                <h1 class="text-2xl main-content correct-text">?</h1>
+              </div>
+              <div
+                class="flex flex-col items-center bg-gray-50 w-1/4 rounded-md main-content">
+                <h4 class="text-sm main-content">Accuracy</h4>
+                <h1 class="text-2xl main-content accuracy-text">?</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- modal showing stats -->
+
       <div class="flex justify-center">
         <div class="flex flex-col my-4">
           <div class="flex justify-center">
             <button
-              class="my-1 bottom-button rounded-xl bottom-button px-3 py-1">
+              class="my-1 bottom-button rounded-xl bottom-button px-3 py-1 stats-button">
               STATS
             </button>
           </div>

@@ -89,6 +89,8 @@ const categorySets: Record<string, CategorySet> = {
 
 const currentGridId: number = 1;
 const gridSize: number = 3;
+let numCorrect: number = 0;
+const guesses: number = 0;
 
 const $topCategories = document.querySelectorAll(
   '.top-cat',
@@ -289,6 +291,47 @@ async function fetchData(usrInput: string): Promise<void> {
     }
   } catch (error) {
     console.log('Error: ', error);
+  }
+}
+
+const $statsModal = document.querySelector('.stats');
+if (!$statsModal) throw new Error('.stats query failed!');
+const $statsButton = document.querySelector('.stats-button');
+if (!$statsButton) throw new Error('.stats-button query failed!');
+
+$statsButton.addEventListener('click', function () {
+  $statsModal.classList.remove('hidden');
+});
+
+$statsModal.addEventListener('click', function (event: Event) {
+  const element = event.target as HTMLElement;
+  console.log(element.classList);
+  if (!element.classList.contains('main-content')) {
+    $statsModal.classList.add('hidden');
+  }
+});
+
+const $guessesTxt = document.querySelector(
+  '.guesses-text',
+) as HTMLHeadingElement;
+if (!$guessesTxt) throw new Error('.guesses-text query failed!');
+const $correctTxt = document.querySelector(
+  '.correct-text',
+) as HTMLHeadingElement;
+if (!$correctTxt) throw new Error('.correct-text query failed!');
+const $accuracyTxt = document.querySelector(
+  '.accuracy-text',
+) as HTMLHeadingElement;
+if (!$accuracyTxt) throw new Error('.accuracy-text query failed!');
+setStatsText();
+
+function setStatsText(): void {
+  $guessesTxt.textContent = guesses.toString();
+  $correctTxt.textContent = numCorrect.toString();
+  if (!(numCorrect / guesses)) {
+    $accuracyTxt.textContent = '100%';
+  } else {
+    $accuracyTxt.textContent = (numCorrect / guesses).toString() + '%';
   }
 }
 
