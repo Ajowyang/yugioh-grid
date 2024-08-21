@@ -139,7 +139,7 @@ const $gridContainer = document.querySelector(
   '.grid-container',
 ) as HTMLDivElement;
 if (!$gridContainer) throw new Error('.grid-container query failed!');
-const $modal = document.querySelector('.modal') as HTMLDivElement;
+const $modal = document.querySelector('.modal') as HTMLDialogElement;
 if (!$modal) throw new Error('.modal query failed!');
 const $input = document.querySelector('input') as HTMLInputElement;
 if (!$input) throw new Error('input query failed');
@@ -151,7 +151,7 @@ $gridContainer.addEventListener('click', function (event: Event) {
     !element.classList.contains('correct') &&
     !element.classList.contains('wrong')
   ) {
-    $modal.classList.remove('hidden');
+    $modal.show();
     element.classList.add('bg-yellow-500', 'selected-sq');
   }
 });
@@ -302,6 +302,11 @@ async function fetchData(usrInput: string): Promise<void> {
       $selectedSq.classList.remove('hover:bg-yellow-100');
       clearSelectedSqResetModal($selectedSq);
     }
+    if (completedSquares === gridSize * gridSize && $statsModal) {
+      setStatsText();
+      $statsModal.show();
+      console.log('fired');
+    }
   } catch (error) {
     console.log('Error: ', error);
   }
@@ -355,8 +360,6 @@ function setStatsText(): void {
   }
 
   if (completedSquares === gridSize * gridSize && $statsModal) {
-    $statsModal.classList.remove('hidden');
-
     if (numCorrect / guesses === 1) {
       $statsHeading.textContent = 'Perfect!';
     } else if (numCorrect / guesses >= 0.66) {
@@ -372,5 +375,5 @@ function setStatsText(): void {
 function clearSelectedSqResetModal(sq: HTMLDivElement): void {
   sq.classList.remove('bg-yellow-500', 'selected-sq');
   $input.value = '';
-  $modal.classList.add('hidden');
+  $modal.close();
 }

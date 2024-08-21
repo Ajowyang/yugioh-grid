@@ -126,7 +126,7 @@ $gridContainer.addEventListener('click', function (event) {
     !element.classList.contains('correct') &&
     !element.classList.contains('wrong')
   ) {
-    $modal.classList.remove('hidden');
+    $modal.show();
     element.classList.add('bg-yellow-500', 'selected-sq');
   }
 });
@@ -198,6 +198,11 @@ async function fetchData(usrInput) {
       $selectedSq.classList.remove('hover:bg-yellow-100');
       clearSelectedSqResetModal($selectedSq);
     }
+    if (completedSquares === gridSize * gridSize && $statsModal) {
+      setStatsText();
+      $statsModal.show();
+      console.log('fired');
+    }
   } catch (error) {
     console.log('Error: ', error);
   }
@@ -236,7 +241,6 @@ function setStatsText() {
       Math.floor((numCorrect / guesses) * 100).toString() + '%';
   }
   if (completedSquares === gridSize * gridSize && $statsModal) {
-    $statsModal.classList.remove('hidden');
     if (numCorrect / guesses === 1) {
       $statsHeading.textContent = 'Perfect!';
     } else if (numCorrect / guesses >= 0.66) {
@@ -251,5 +255,5 @@ function setStatsText() {
 function clearSelectedSqResetModal(sq) {
   sq.classList.remove('bg-yellow-500', 'selected-sq');
   $input.value = '';
-  $modal.classList.add('hidden');
+  $modal.close();
 }
