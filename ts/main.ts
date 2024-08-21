@@ -305,10 +305,9 @@ async function fetchData(usrInput: string): Promise<void> {
     if (completedSquares === gridSize * gridSize && $statsModal) {
       setStatsText();
       $statsModal.show();
-      console.log('fired');
     }
   } catch (error) {
-    console.log('Error: ', error);
+    console.error('Error: ', error);
   }
 }
 
@@ -328,7 +327,7 @@ $statsButton.addEventListener('click', function () {
 
 $statsModal.addEventListener('click', function (event: Event) {
   const element = event.target as HTMLElement;
-  console.log(element.classList);
+
   if (!element.classList.contains('main-content')) {
     $statsModal.close();
   }

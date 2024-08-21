@@ -201,10 +201,9 @@ async function fetchData(usrInput) {
     if (completedSquares === gridSize * gridSize && $statsModal) {
       setStatsText();
       $statsModal.show();
-      console.log('fired');
     }
   } catch (error) {
-    console.log('Error: ', error);
+    console.error('Error: ', error);
   }
 }
 const $statsModal = document.querySelector('.stats');
@@ -219,7 +218,6 @@ $statsButton.addEventListener('click', function () {
 });
 $statsModal.addEventListener('click', function (event) {
   const element = event.target;
-  console.log(element.classList);
   if (!element.classList.contains('main-content')) {
     $statsModal.close();
   }
