@@ -255,3 +255,28 @@ function clearSelectedSqResetModal(sq) {
   $input.value = '';
   $modal.close();
 }
+const $gameSquares = document.querySelectorAll('.game-square');
+if (!$gameSquares) throw new Error('.game-square query failed!');
+const $clearButton = document.querySelector('.clear-button');
+if (!$clearButton) throw new Error('.clear button query failed!');
+$clearButton.addEventListener('click', function () {
+  clearGrid();
+});
+function clearGrid() {
+  guesses = 0;
+  numCorrect = 0;
+  completedSquares = 0;
+  setStatsText();
+  $statsHeading.textContent = 'Stats';
+  for (let i = 0; i < $gameSquares.length; i++) {
+    console.log($gameSquares[i]);
+    $gameSquares[i].classList.remove(
+      'bg-green-500',
+      'bg-red-500',
+      'wrong',
+      'correct',
+    );
+    $gameSquares[i].classList.add('hover:bg-yellow-100');
+    $gameSquares[i].innerHTML = '';
+  }
+}
