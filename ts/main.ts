@@ -275,10 +275,6 @@ async function fetchData(usrInput: string): Promise<void> {
       cardData[rowCatCheckFor] === rowCatVal &&
       cardData[colCatCheckFor] === colCatVal
     ) {
-      numCorrect++;
-      guesses++;
-      completedSquares++;
-      setStatsText();
       const monsterImgContainer = document.createElement('div');
       monsterImgContainer.classList.add(
         'h-11/12',
@@ -292,6 +288,10 @@ async function fetchData(usrInput: string): Promise<void> {
       $selectedSq.appendChild(monsterImgContainer);
       $selectedSq.classList.add('bg-green-500', 'correct');
       $selectedSq.classList.remove('hover:bg-yellow-100');
+      numCorrect++;
+      guesses++;
+      completedSquares++;
+      setStatsText();
       clearSelectedSqResetModal($selectedSq);
     } else {
       guesses++;
@@ -340,6 +340,7 @@ setStatsText();
 function setStatsText(): void {
   $guessesTxt.textContent = guesses.toString();
   $correctTxt.textContent = numCorrect.toString();
+
   if (!(numCorrect / guesses)) {
     $accuracyTxt.textContent = '0%';
   } else {
@@ -349,6 +350,15 @@ function setStatsText(): void {
 
   if (completedSquares === gridSize * gridSize && $statsModal) {
     $statsModal.classList.remove('hidden');
+    const $statsHeading = document.querySelector(
+      '.stats-heading',
+    ) as HTMLHeadingElement;
+    if (!$statsHeading) throw new Error('.stats-heading query failed');
+    if (numCorrect / guesses === 1) {
+      $statsHeading.textContent = 'Perfect!';
+    } else if (numCorrect / guesses >= 0.5) {
+      $statsHeading.textContent = 'Nice Work!';
+    }
   }
 }
 
