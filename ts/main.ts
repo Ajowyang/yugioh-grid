@@ -396,7 +396,7 @@ function clearGrid(): void {
   $statsHeading.textContent = 'Stats';
 
   for (let i = 0; i < $gameSquares.length; i++) {
-    console.log($gameSquares[i]);
+    const element = $gameSquares[i] as HTMLElement;
     $gameSquares[i].classList.remove(
       'bg-green-500',
       'bg-red-500',
@@ -404,6 +404,8 @@ function clearGrid(): void {
       'correct',
     );
     $gameSquares[i].classList.add('hover:bg-yellow-100');
-    $gameSquares[i].innerHTML = '';
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
   }
 }
