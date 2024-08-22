@@ -148,6 +148,7 @@ const gridSize: number = 3;
 let numCorrect: number = 0;
 let guesses: number = 0;
 let completedSquares: number = 0;
+let currentMonsters: string[] = [];
 
 $gridIDLabel.textContent = `#${currentGridId.toString()}`;
 
@@ -349,6 +350,7 @@ async function fetchData(usrInput: string): Promise<void> {
       numCorrect++;
       guesses++;
       completedSquares++;
+      currentMonsters.push(cardData.name.toLowerCase());
 
       clearSelectedSqResetModal($selectedSq);
     } else {
@@ -449,6 +451,7 @@ function clearGrid(): void {
   guesses = 0;
   numCorrect = 0;
   completedSquares = 0;
+  currentMonsters = [];
   setStatsText();
   $statsHeading.textContent = 'Stats';
 
@@ -482,7 +485,7 @@ $switcher.addEventListener('click', function (): void {
   $categoryModal.show();
 });
 
-for (const categorySet in categorySets) {
+function renderRow(dataGridId: number): HTMLDivElement {
   const gridRow = document.createElement('div');
   gridRow.classList.add(
     'flex',
@@ -493,8 +496,8 @@ for (const categorySet in categorySets) {
     'main-content',
     'select-grid',
   );
-  gridRow.setAttribute('data-grid-ID', categorySet);
-  if (currentGridId === parseInt(categorySet)) {
+  // create row
+  if (currentGridId === dataGridId) {
     gridRow.classList.add('bg-yellow-500', 'selected-grid-cat-row');
     gridRow.classList.remove('hover:bg-yellow-200');
   }
@@ -505,15 +508,22 @@ for (const categorySet in categorySets) {
   puzzImg.setAttribute('src', './images/puzzle.png');
   puzzImg.classList.add('main-content');
   imgContainer.appendChild(puzzImg);
+  // create image container containing image
 
   const gridRowTxt = document.createElement('h1');
-  gridRowTxt.textContent = `Grid #${gridRow.getAttribute('data-grid-ID')}`;
+  gridRowTxt.textContent = `Grid #${dataGridId}`;
   gridRowTxt.classList.add('main-content');
 
   gridRow.appendChild(imgContainer);
   gridRow.appendChild(gridRowTxt);
 
-  $gridSetsContainer.appendChild(gridRow);
+  return gridRow;
+}
+
+for (const categorySet in categorySets) {
+  const gridCatRow = renderRow(parseInt(categorySet));
+  gridCatRow.setAttribute('data-grid-ID', categorySet);
+  $gridSetsContainer.appendChild(gridCatRow);
 }
 
 $categoryModal.addEventListener('click', function (event: Event): void {
@@ -535,9 +545,7 @@ $categoryModal.addEventListener('click', function (event: Event): void {
     element.tagName === 'H1' ||
     element.tagName === 'DIV'
   ) {
-    console.log('closestCatRow:', closestCatRow);
-    console.log('selected row:', $selectedRow);
-    const closestGridId = closestCatRow.getAttribute('data-grid-ID') as string;
+    const closestGridId = closestCatRow.getAttribute('data-grid-ID');
     if (!closestGridId) throw new Error('No grid ID found');
 
     newGridCategories(parseInt(closestGridId));
@@ -556,14 +564,12 @@ function newGridCategories(newGridId: number): void {
   currentGridId = newGridId;
   $gridIDLabel.textContent = '#' + currentGridId.toString();
 
-  for (let i = 0; i < $topCategories.length; i++) {
+  for (let i = 0; i < gridSize; i++) {
     const topCatElement = $topCategories[i] as HTMLElement;
+    const leftCatElement = $leftCategories[i] as HTMLElement;
     while (topCatElement.firstChild) {
       topCatElement.removeChild(topCatElement.firstChild);
     }
-  }
-  for (let i = 0; i < $leftCategories.length; i++) {
-    const leftCatElement = $leftCategories[i] as HTMLElement;
     while (leftCatElement.firstChild) {
       leftCatElement.removeChild(leftCatElement.firstChild);
     }
