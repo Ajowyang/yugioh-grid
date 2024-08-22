@@ -50,7 +50,12 @@ const categorySets = {
         imgPath: './images/spellcaster.png',
         text: 'Spellcaster',
       },
-      { checkFor: 'ATK', val: 1800, imgPath: './images', text: '1800 ATK' },
+      {
+        checkFor: 'atk',
+        val: 2400,
+        imgPath: './images/ATK.png',
+        text: '2400 ATK',
+      },
       {
         checkFor: 'atk',
         val: 2800,
@@ -65,7 +70,12 @@ const categorySets = {
         imgPath: './images/FIRE.png',
         text: 'FIRE',
       },
-      { checkFor: 'level', val: 7, imgPath: './images', text: 'Level 7' },
+      {
+        checkFor: 'level',
+        val: 7,
+        imgPath: './images/levelstar.png',
+        text: 'Level 7',
+      },
       {
         checkFor: 'frameType',
         val: 'synchro',
@@ -74,12 +84,57 @@ const categorySets = {
       },
     ],
   },
+  3: {
+    topCategories: [
+      {
+        checkFor: 'frameType',
+        val: 'effect',
+        imgPath: './images/effect.png',
+        text: 'Effect',
+      },
+      {
+        checkFor: 'frameType',
+        val: 'normal',
+        imgPath: './images/normal.png',
+        text: 'Normal',
+      },
+      {
+        checkFor: 'race',
+        val: 'Dragon',
+        imgPath: './images/dragon.png',
+        text: 'Dragon',
+      },
+    ],
+    leftCategories: [
+      {
+        checkFor: 'attribute',
+        val: 'LIGHT',
+        imgPath: './images/LIGHT.png',
+        text: 'LIGHT',
+      },
+      {
+        checkFor: 'level',
+        val: 7,
+        imgPath: './images/levelstar.png',
+        text: 'Level 7',
+      },
+      {
+        checkFor: 'atk',
+        val: 2400,
+        imgPath: './images/ATK.png',
+        text: '2400 ATK',
+      },
+    ],
+  },
 };
-const currentGridId = 1;
+const $gridIDLabel = document.querySelector('.grid-ID-label');
+if (!$gridIDLabel) throw new Error('.grid-ID-label query failed!');
+let currentGridId = 3;
 const gridSize = 3;
 let numCorrect = 0;
 let guesses = 0;
 let completedSquares = 0;
+$gridIDLabel.textContent = `#${currentGridId.toString()}`;
 const $topCategories = document.querySelectorAll('.top-cat');
 if (!$topCategories) throw new Error('.top-cat query failed!');
 const $leftCategories = document.querySelectorAll('.left-cat');
@@ -281,4 +336,87 @@ function clearGrid() {
       element.removeChild(element.firstChild);
     }
   }
+}
+const $switcher = document.querySelector('.switcher-square');
+if (!$switcher) throw new Error('.switcher-square query failed!');
+const $categoryModal = document.querySelector('.grid-cats');
+if (!$categoryModal) throw new Error('.grid-cats query failed!');
+const $gridSetsContainer = document.querySelector('.grid-sets-container');
+if (!$gridContainer) throw new Error('.grid-sets-container query failed!');
+$switcher.addEventListener('click', function () {
+  $categoryModal.show();
+});
+for (let categorySet in categorySets) {
+  const gridRow = document.createElement('div');
+  gridRow.classList.add(
+    'flex',
+    'py-1',
+    'ml-2',
+    'rounded-xl',
+    'hover:bg-yellow-200',
+    'main-content',
+    'select-grid',
+  );
+  gridRow.setAttribute('data-grid-ID', categorySet);
+  if (currentGridId === parseInt(categorySet)) {
+    gridRow.classList.add('bg-yellow-500', 'selected-grid-cat-row');
+    gridRow.classList.remove('hover:bg-yellow-200');
+  }
+  const imgContainer = document.createElement('div');
+  imgContainer.classList.add('w-1/12', 'main-content');
+  const puzzImg = document.createElement('img');
+  puzzImg.setAttribute('src', './images/puzzle.png');
+  puzzImg.classList.add('main-content');
+  imgContainer.appendChild(puzzImg);
+  const gridRowTxt = document.createElement('h1');
+  gridRowTxt.textContent = `Grid #${gridRow.getAttribute('data-grid-ID')}`;
+  gridRowTxt.classList.add('main-content');
+  gridRow.appendChild(imgContainer);
+  gridRow.appendChild(gridRowTxt);
+  $gridSetsContainer.appendChild(gridRow);
+}
+$categoryModal.addEventListener('click', function (event) {
+  const element = event.target;
+  let closestCatRow = element.closest('.select-grid');
+  const $selectedRow = document.querySelector('.selected-grid-cat-row');
+  if (!$selectedRow) throw new Error('.selected-grid-cat-row query failed!');
+  if (
+    !element.classList.contains('main-content') ||
+    closestCatRow.classList.contains('selected-grid-cat-row')
+  ) {
+    $categoryModal.close();
+  } else if (
+    element.tagName === 'IMG' ||
+    element.tagName === 'H1' ||
+    element.tagName === 'DIV'
+  ) {
+    console.log('closestCatRow:', closestCatRow);
+    console.log('selected row:', $selectedRow);
+    const closestGridId = closestCatRow.getAttribute('data-grid-ID');
+    if (!closestGridId) throw new Error('No grid ID found');
+    newGridCategories(parseInt(closestGridId));
+    $selectedRow.classList.remove('bg-yellow-500', 'selected-grid-cat-row');
+    $selectedRow.classList.add('hover:bg-yellow-200');
+    closestCatRow.classList.add('selected-grid-cat-row', 'bg-yellow-500');
+    closestCatRow.classList.remove('hover:bg-yellow-200');
+    $categoryModal.close();
+  }
+});
+function newGridCategories(newGridId) {
+  clearGrid();
+  currentGridId = newGridId;
+  $gridIDLabel.textContent = '#' + currentGridId.toString();
+  for (let i = 0; i < $topCategories.length; i++) {
+    const topCatElement = $topCategories[i];
+    while (topCatElement.firstChild) {
+      topCatElement.removeChild(topCatElement.firstChild);
+    }
+  }
+  for (let i = 0; i < $leftCategories.length; i++) {
+    const leftCatElement = $leftCategories[i];
+    while (leftCatElement.firstChild) {
+      leftCatElement.removeChild(leftCatElement.firstChild);
+    }
+  }
+  renderGridCategories(newGridId);
 }
