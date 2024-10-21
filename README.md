@@ -11,23 +11,24 @@ Yu-Gi-Oh! Grid Trivia is an interactive web-based game where users test their kn
 ## Using The App
 To play the game, users select a grid square, type in the name of a Yu-Gi-Oh! card that fits both the row and column categories, and submit their guess.
 
-### How to Play
+## How to Play
 - **Select a square**: Click on any square in the 3x3 grid to begin.
 - **Enter a card name**: An input field will appear, where users can type the name of a Yu-Gi-Oh! card.
 - **Submit your guess**: The game will validate the card based on the two associated categories using the Yu-Gi-Oh! API.
 
-#### Categories
-Categories include:
+## Categories
+Categories may include:
 - Card level
 - Type (e.g., Dragon, Spellcaster, etc.)
 - Attribute (e.g., Light, Dark, Fire, etc.)
 - Card frame type (e.g., Effect, Normal, Fusion, XYZ, Synchro, etc.)
+- ATK and/or DEF points
 
-### Game Feedback
+## Game Feedback
 - **Correct answer**: The square background turns green, and an image of the card appears inside the square.
 - **Incorrect answer**: The square background turns red to indicate an incorrect guess.
 
-### Goal
+## Goal
 The objective of the game is to fill the entire grid with correct answers by matching cards to their respective categories. Players can change the set of categories to play different versions of the grid.
 
 
