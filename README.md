@@ -30,8 +30,6 @@ Categories include:
 ### Goal
 The objective of the game is to fill the entire grid with correct answers by matching cards to their respective categories. Players can change the set of categories to play different versions of the grid.
 
-## Screenshots
-_(Add screenshots of the game here if available)_
 
 ## About
 A grid-based Yu-Gi-Oh! trivia game that challenges players to match cards with two different categories in each square. Built with vanilla HTML, CSS, and JavaScript, and utilizing the Yu-Gi-Oh! API for card validation. The game allows users to test their knowledge and explore new category combinations for a fresh challenge each time they play.
